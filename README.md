@@ -1,2 +1,1 @@
-# 3D-Game
-My first Android gaming project using Python
+Mac + Unity Hub + GitHub setup instructions
