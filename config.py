@@ -1,0 +1,12 @@
+
+GAME_NAME = " Battle royal"
+
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+
+PLAYER_SPEED = 6
+JUMP_HEIGHT = 2
+
+GAME_MODE = "Battle Royale"
+
+GRAPHICS_QUALITY = "High"
