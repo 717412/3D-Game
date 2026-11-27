@@ -1,0 +1,135 @@
+
+from ursina import *
+import math
+
+
+def create_character(position=(0, 0, 0)):
+
+    root = Entity(position=position)
+
+    # Body
+    torso = Entity(
+        parent=root,
+        model="cube",
+        position=(0, 1.4, 0),
+        scale=(0.65, 0.9, 0.35),
+        color=color.azure
+    )
+
+    # Head
+    head = Entity(
+        parent=root,
+        model="sphere",
+        position=(0, 2.15, 0),
+        scale=(0.4, 0.4, 0.4),
+        color=color.rgb(220, 175, 140)
+    )
+
+    # Arms
+    left_arm = Entity(
+        parent=root,
+        position=(-0.43, 1.75, 0)
+    )
+
+    Entity(
+        parent=left_arm,
+        model="cube",
+        position=(0, -0.35, 0),
+        scale=(0.2, 0.7, 0.22),
+        color=color.azure
+    )
+
+    right_arm = Entity(
+        parent=root,
+        position=(0.43, 1.75, 0)
+    )
+
+    Entity(
+        parent=right_arm,
+        model="cube",
+        position=(0, -0.35, 0),
+        scale=(0.2, 0.7, 0.22),
+        color=color.azure
+    )
+
+    # Legs
+    left_leg = Entity(
+        parent=root,
+        position=(-0.18, 1, 0)
+    )
+
+    Entity(
+        parent=left_leg,
+        model="cube",
+        position=(0, -0.4, 0),
+        scale=(0.24, 0.8, 0.28),
+        color=color.dark_gray
+    )
+
+    right_leg = Entity(
+        parent=root,
+        position=(0.18, 1, 0)
+    )
+
+    Entity(
+        parent=right_leg,
+        model="cube",
+        position=(0, -0.4, 0),
+        scale=(0.24, 0.8, 0.28),
+        color=color.dark_gray
+    )
+
+    return {
+        "root": root,
+        "torso": torso,
+        "head": head,
+        "arms": [left_arm, right_arm],
+        "legs": [left_leg, right_leg]
+    }
+
+
+def animate_character(character, mode="idle"):
+
+    speed = {
+        "idle": 0,
+        "walk": 5,
+        "run": 12,
+        "jump": 8
+    }.get(mode, 0)
+
+    movement = math.sin(time.time() * speed) * 35
+
+    if mode in ("walk", "run"):
+        character["arms"][0].rotation_x = movement
+        character["arms"][1].rotation_x = -movement
+
+        character["legs"][0].rotation_x = -movement
+        character["legs"][1].rotation_x = movement
+
+    elif mode == "jump":
+        for arm in character["arms"]:
+            arm.rotation_x = -65
+
+        for leg in character["legs"]:
+            leg.rotation_x = 20
+
+    else:
+        for part in character["arms"] + character["legs"]:
+            part.rotation_x = 0
+
+
+def customise_character(
+    character,
+    shirt=color.azure,
+    pants=color.dark_gray,
+    skin=color.rgb(220, 175, 140)
+):
+
+    character["torso"].color = shirt
+    character["head"].color = skin
+
+    for leg in character["legs"]:
+        leg.children[0].color = pants
+
+    for arm in character["arms"]:
+        arm.children[0].color = shirt
